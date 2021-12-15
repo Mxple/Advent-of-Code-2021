@@ -27,40 +27,18 @@ for row in rows:
     else:
         temp.append([int(s) for s in row.split() if s.isdigit()])
 tables.append(temp)
-#flips on diagonal:
-#[[9, 38, 6, 58, 99],           [[9, 89, 26, 67, 66], 
-# [89, 69, 96, 33, 73],         [38, 69, 20, 29, 45],
-# [26, 20, 32, 12, 27],  -->    [6, 96, 32, 79, 24],
-# [67, 29, 79, 81, 59],         [58, 33, 12, 81, 36],
-# [66, 45, 24, 36, 68]]         [99, 73, 27, 59, 68]]
-def transpose(lst):
-    temp = []
-    result = []
-    for i in range(len(lst[0])):
-        for row in lst:
-            temp.append(row[i])
-        result.append(temp)
-        temp = []
-    return result
 
 class Bingo:
-    def __init__(self, lst, lstT):
-        self.rows = lst
-        self.cols = lstT
+    def __init__(self, lst):
+        self.matrix = np.array(lst)
     def turn(self, num):
-        for r in range(len(self.rows)):
-            self.rows[r]=[-1 if x == num else x for x in self.rows[r]]
-        for c in range(len(self.cols)):
-            self.cols[c]=[-1 if x == num else x for x in self.cols[c]]
+        for r in range(len(self.matrix)):
+            self.matrix[r]=[0 if x == num else x for x in self.matrix[r]]
     def checkWin(self):
-        for r in self.rows:
-            if       (r == [-1,-1,-1,-1,-1]):
-                return (True)
-        for c in self.cols:
-            return (c == [-1,-1,-1,-1,-1])
+        return(np.linalg.det(self.matrix)==0)
     def getScore(self, prev):
         result = 0
-        for row in self.rows:
+        for row in self.matrix:
             for item in row:
                 if item > 0:
                     result += item
@@ -69,7 +47,7 @@ class Bingo:
 
 bingoBoards = []
 for table in tables:
-    bingoBoards.append(Bingo(table, transpose(table)))
+    bingoBoards.append(Bingo(table))
 
 #main loop
 #part 1
