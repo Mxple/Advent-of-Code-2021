@@ -4,9 +4,10 @@ data = file.read()
 file.close()
 
 #list of order in which numbers are called
-calls = data[:289].split(",")
+calls = data.partition('\n')[0].split(",")
+rows = data[len(calls):].split("\n")
+calls = [int(x) for x in calls]
 
-rows = data[291:].split("\n")
 tables = []
 temp = []
 
@@ -23,6 +24,7 @@ for row in rows:
         temp = []
     else:
         temp.append([int(s) for s in row.split() if s.isdigit()])
+tables.append(temp)
 
 #flips on diagonal:
 # [' 9 38  6 58 99'       [' 9 89 26 67 66'
@@ -46,9 +48,9 @@ class Bingo:
         self.cols = lstT
     def turn(self, num):
         for r in range(len(self.rows)):
-            [-1 if x == num else x for x in self.rows[r]]
+            self.rows[r]=[-1 if x == num else x for x in self.rows[r]]
         for c in range(len(self.cols)):
-            [-1 if x == num else x for x in self.cols[c]]
+            self.cols[c]=[-1 if x == num else x for x in self.cols[c]]
     def checkWin(self):
         for r in self.rows:
             return (r == [-1,-1,-1,-1,-1])
@@ -56,7 +58,7 @@ class Bingo:
             return (c == [-1,-1,-1,-1,-1])
     def getScore(self, prev):
         result = 0
-        for row in rows:
+        for row in self.rows:
             for item in row:
                 if item > 0:
                     result += item
@@ -77,5 +79,7 @@ while winner == None:
             if bingoBoards[board].checkWin():
                 winner = board
                 score = bingoBoards[board].getScore(i)
-print (winner, score, calls)
+                print (winner, score, i)
+                print(bingoBoards[board].rows)
+                quit()
 
