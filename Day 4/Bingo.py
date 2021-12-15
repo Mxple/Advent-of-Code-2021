@@ -1,16 +1,17 @@
 import os, sys
+import tabulate
+
+from types import DynamicClassAttribute
 file = open(os.path.join(sys.path[0], "input.txt"), "r")
 data = file.read()
 file.close()
 
 #list of order in which numbers are called
 calls = data.partition('\n')[0].split(",")
-rows = data[len(calls):].split("\n")
+rows = data.partition('\n\n')[2].split("\n")
 calls = [int(x) for x in calls]
-
 tables = []
 temp = []
-
 #tables is a list of lists of list where each middle list represents a table with its contents being lists ie:
 #[[9, 38, 6, 58, 99], [89, 69, 96, 33, 73], [26, 20, 32, 12, 27], [67, 29, 79, 81, 59], [66, 45, 24, 36, 68]] -->
 #  9 38  6 58 99
@@ -25,13 +26,12 @@ for row in rows:
     else:
         temp.append([int(s) for s in row.split() if s.isdigit()])
 tables.append(temp)
-
 #flips on diagonal:
-# [' 9 38  6 58 99'       [' 9 89 26 67 66'
-#  '89 69 96 33 73'        '38 69 20 29 45'
-#  '26 20 32 12 27'   -->  ' 6 96 32 79 24'
-#  '67 29 79 81 59'        '58 33 12 81 36'
-#  '66 45 24 36 68']       '99 73 27 59 68']
+#[[9, 38, 6, 58, 99],           [[9, 89, 26, 67, 66], 
+# [89, 69, 96, 33, 73],         [38, 69, 20, 29, 45],
+# [26, 20, 32, 12, 27],  -->    [6, 96, 32, 79, 24],
+# [67, 29, 79, 81, 59],         [58, 33, 12, 81, 36],
+# [66, 45, 24, 36, 68]]         [99, 73, 27, 59, 68]]
 def transpose(lst):
     temp = []
     result = []
@@ -53,7 +53,8 @@ class Bingo:
             self.cols[c]=[-1 if x == num else x for x in self.cols[c]]
     def checkWin(self):
         for r in self.rows:
-            return (r == [-1,-1,-1,-1,-1])
+            if       (r == [-1,-1,-1,-1,-1]):
+                return (True)
         for c in self.cols:
             return (c == [-1,-1,-1,-1,-1])
     def getScore(self, prev):
@@ -70,16 +71,18 @@ for table in tables:
     bingoBoards.append(Bingo(table, transpose(table)))
 
 #main loop
-winner = None
-score = 0
-while winner == None:
-    for i in calls:
-        for board in range(len(bingoBoards)):
-            (bingoBoards[board]).turn(i)
-            if bingoBoards[board].checkWin():
-                winner = board
-                score = bingoBoards[board].getScore(i)
-                print (winner, score, i)
-                print(bingoBoards[board].rows)
-                quit()
+#part 1
+winners = {}
+for i in calls:
+    for board in range(len(bingoBoards)):
+        bingoBoards[board].turn(i)
+        if bingoBoards[board].checkWin() and bingoBoards[board] not in winners.keys():
+             winners[bingoBoards[board]] = [board, (calls.index(i), i), bingoBoards[board].getScore(i)]
 
+results = list(winners.values())
+
+
+print("index"+"\t|"+"rounds, num"+"\t|"+"score")
+print("__________________________")
+for i in range(len(results)):
+    print(str(results[i][0])+"\t|"+str(results[i][1])+"\t|"+str(results[i][2]))
