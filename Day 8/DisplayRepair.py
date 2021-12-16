@@ -26,7 +26,7 @@ def same(a, b):
 def toDigits(key, puzzle):
     keys = key.split()
     puzzles = puzzle.split()
-    a=b=c=d=e=f=g=zero=one=two=three=four=five=six=seven=eight=nine = ""
+    a=b=c=d=e=f=g=zero=one=two=three=five=six=seven=four=eight=nine = ""
 
     for k in keys:
         if len(k) == 2:
@@ -34,15 +34,14 @@ def toDigits(key, puzzle):
         if len(k) == 3:
             seven = k
         if len(k) == 4:
-            four == k
+            four = k
         if len(k) == 7:
             eight = k
-
     a = inside(seven,one)
 
     for k in keys:
         if len(k) == 5:
-            if inside(one, k):
+            if inside(one, k) == True:
                 three = k
     for k in keys:
         if same(k,three+four):
@@ -50,16 +49,17 @@ def toDigits(key, puzzle):
 
     e = inside(eight,nine)
     g = inside(nine,four+seven)
-
-    b = inside(eight, three+e+g)
+    b = inside(eight, three+e)
     for k in keys:
         if same(e+g+b+seven,k):
             zero = k
 
     d = inside(eight,zero)
+
     for k in keys:
-        if len(k)==6 and same(k,zero) and same(k,nine):
+        if len(k)==6 and not same(k,zero) and not same(k,nine):
             six = k
+
     c = inside(eight,six)
     f = inside(one, c)
 
@@ -80,17 +80,24 @@ def toDigits(key, puzzle):
            temp += enigma[char]
         decoded.append(temp)
 
-
-    map = ["abcefg","cf","acdfg","bcdf","abdfg","abdfg","abdefg","acf","abcdefg","abcdfg"]
+    map = ["abcefg","cf","acdeg","acdfg","bcdf","abdfg","abdefg","acf","abcdefg","abcdfg"]
     result = []
     for d in range(len(decoded)):
         for i in range(len(map)):
-            if same(puzzles[d],map[i]):
+            if same(decoded[d],map[i]):
                 result.append(i)
-    return result
-
+    return (result)
 
 display = []
 for item in notepad.items():
     display.append(toDigits(item[0],item[1]))
-print(display)
+
+result1 = 0
+listpart2 = []
+for i in display:
+    for j in i:
+        if j in [1,4,7,8]:
+            result1 +=1
+    listpart2.append(int("".join(str(s) for s in i)))
+print("part 1: " + str(result1))
+print("part 2: " + str(sum(listpart2)))
