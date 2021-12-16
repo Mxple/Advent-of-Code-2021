@@ -1,9 +1,10 @@
-import os, sys, numpy as np
-
+import os, sys, numpy as np, time
+start = time.time()
 with open(os.path.join(sys.path[0], "input.txt")) as file:
     data = file.read()
 data = [int(i) for i in data.split(",") if i.isdigit]
 #data is a list of integers, each representing the internal timer of a lanternfish
+'''
 class Fish:
     def __init__(self, timer=8):
         self.timer = timer
@@ -14,7 +15,7 @@ class Fish:
         else:
             self.timer = 6
             return True
-
+'''
 #starting batch
 fishies=np.zeros(shape=(9,1))
 for i in data:
@@ -25,9 +26,12 @@ for i in range(8):
     dayMatrix[i][i+1] = 1
 dayMatrix[6][0]=1
 dayMatrix[8][0]=1
+print(dayMatrix)
 
 result = np.linalg.matrix_power(dayMatrix, 256).dot(fishies)
 print(sum(result))
+end = time.time()
+print(end - start)
 
 '''
 for timer in data:

@@ -11,7 +11,6 @@ chart.pop()
 for c in range(len(chart)):
     while len(chart[c]) != len(chart[-1]):
         chart[c].append(-1)
-print(chart)
 
 a = np.array(chart)
 a=a.transpose()
