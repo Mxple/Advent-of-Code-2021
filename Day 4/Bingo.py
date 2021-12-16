@@ -1,6 +1,4 @@
 import os, sys
-import tabulate
-import numpy as np
 
 from types import DynamicClassAttribute
 file = open(os.path.join(sys.path[0], "input.txt"), "r")
@@ -49,15 +47,15 @@ class Bingo:
         self.cols = lstT
     def turn(self, num):
         for r in range(len(self.rows)):
-            self.rows[r]=[-1 if x == num else x for x in self.rows[r]]
+            self.rows[r]=[0 if x == num else x for x in self.rows[r]]
         for c in range(len(self.cols)):
-            self.cols[c]=[-1 if x == num else x for x in self.cols[c]]
+            self.cols[c]=[0 if x == num else x for x in self.cols[c]]
     def checkWin(self):
         for r in self.rows:
-            if       (r == [-1,-1,-1,-1,-1]):
+            if       (r == [0,0,0,0,0]):
                 return (True)
         for c in self.cols:
-            return (c == [-1,-1,-1,-1,-1])
+            return (c == [0,0,0,0,0])
     def getScore(self, prev):
         result = 0
         for row in self.rows:

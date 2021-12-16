@@ -1,5 +1,4 @@
 import os, sys
-import tabulate
 import numpy as np
 
 from types import DynamicClassAttribute
