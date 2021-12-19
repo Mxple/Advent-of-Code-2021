@@ -91,12 +91,16 @@ def array_in_seq(array, seq):
 # print (result)
 memory = []
 syncro = 1
+
+grids = open(os.path.join(sys.path[0],"grids.txt"), "w") 
+memoryresults = open(os.path.join(sys.path[0],"memoryresults.txt"), "w") 
+
 while step() != len(grid) * len(grid[0]):
     syncro += 1
-
-    # if array_in_seq(grid, memory):
-    #     continue
-    # else:
+    print(grid, file = grids)
     memory.append(grid)
-print(memory)
+print(memory, file = memoryresults)
 print(syncro)
+
+grids.close()
+memoryresults.close()
