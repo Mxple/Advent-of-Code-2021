@@ -1,5 +1,4 @@
 import os, sys, numpy as np, matplotlib.pyplot as plt, mpl_toolkits.mplot3d  
-from skimage.morphology import flood_fill
 
 with open(os.path.join(sys.path[0], "input.txt"),"r") as file:
     data = file.read().split()

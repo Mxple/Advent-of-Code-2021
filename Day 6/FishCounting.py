@@ -26,7 +26,6 @@ for i in range(8):
     dayMatrix[i][i+1] = 1
 dayMatrix[6][0]=1
 dayMatrix[8][0]=1
-print(dayMatrix)
 
 result = np.linalg.matrix_power(dayMatrix, 256).dot(fishies)
 print(sum(result))
