@@ -1,7 +1,7 @@
 import os, sys
 with open(os.path.join(sys.path[0], "input.txt"), "r") as file:
     data = file.read().replace("-"," ").splitlines()
-print(data)
+
 map = {}
 for d in data:
     if d.split()[0] not in map:
@@ -13,19 +13,25 @@ for d in data:
     else:
         map[d.split()[1]].append(d.split()[0])
 map.pop("end")
-print(map)
 
-def getPaths(startPos, visited = ["start"]):
+for key, value in map.items():
+    if "start" in value:
+        value.remove("start")
+print(map)
+def getPaths(node, visited,path=[]):
     paths = 0
-    if startPos == "end":
+    if node == "end":
+        path.append('end')
+        print(path)
         return 1
-    for next in map[startPos]:
-        if next.islower():
-            if next in visited:
-                continue
-            visited.append(next)
-        else:
-            paths += getPaths(next, visited)
+    if node in visited:
+        return 0
+    path.append(node)
+    if node.islower():
+        visited.append(node)
+    for branch in map[node]:
+        paths += getPaths(branch, visited,path)
     return paths
 
-print(getPaths("start"))
+
+print(getPaths("start",[]))
