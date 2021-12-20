@@ -21,12 +21,11 @@ def getPaths(startPos, visited = ["start"]):
         return 1
     for next in map[startPos]:
         if next.islower():
-            print("WORKS")
-
             if next in visited:
-                return 0
+                continue
             visited.append(next)
-        paths += getPaths(next, visited)
+        else:
+            paths += getPaths(next, visited)
     return paths
 
 print(getPaths("start"))
