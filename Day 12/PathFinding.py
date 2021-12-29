@@ -13,25 +13,31 @@ for d in data:
     else:
         map[d.split()[1]].append(d.split()[0])
 map.pop("end")
-
 for key, value in map.items():
     if "start" in value:
         value.remove("start")
-print(map)
-def getPaths(node, visited,path=[]):
+
+def getPaths(node="start", visited=set()):
     paths = 0
     if node == "end":
-        path.append('end')
-        print(path)
         return 1
-    if node in visited:
+    if node in visited and node.islower():
         return 0
-    path.append(node)
-    if node.islower():
-        visited.append(node)
     for branch in map[node]:
-        paths += getPaths(branch, visited,path)
+        paths += getPaths(branch, visited | {node})
     return paths
 
+def getPaths2(node="start", visited=set(), visitedTwice=set()):
+    paths = 0
+    if node == "end":
+        return 1
+    if node in visitedTwice and node.islower():
+        return 0
+    other = visitedTwice.copy()
+    if node in visited:
+        other.add(node)
+    for branch in map[node]:
+        paths += getPaths2(branch, visited | {node}, other)
+    return paths
 
-print(getPaths("start",[]))
+print(getPaths2())
